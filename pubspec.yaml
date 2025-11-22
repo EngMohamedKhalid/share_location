@@ -1,7 +1,7 @@
 name: share_location
 description: "Share Location Package."
 version: 0.0.1
-homepage:
+repository: https://github.com/EngMohamedKhalid/share_location
 
 environment:
   sdk: ^3.10.0
