@@ -18,22 +18,24 @@ class ShareMyLocation {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         CustomToast.error("Location permission denied.");
-        throw Exception("Location permission denied.");
+        permission = await Geolocator.requestPermission();
       }
     }
     if (permission == LocationPermission.deniedForever) {
       CustomToast.error("Location permission permanently denied.");
-      throw Exception("Location permission permanently denied.");
+      permission = await Geolocator.requestPermission();
     }
     Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
+      locationSettings: LocationSettings(
+        accuracy: LocationAccuracy.high,
+      ),
     );
 
-    // Generate Google Maps URL
     final url =
         "https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}";
-
-    // Share
-    await Share.share(url);
+    await SharePlus.instance.share(ShareParams(
+      subject: "Share My Location",
+      text: url,
+    ));
   }
 }
