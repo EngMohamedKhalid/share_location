@@ -1,8 +1,6 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:share_plus/share_plus.dart';
 
-import 'custom_toast.dart';
-
 class ShareMyLocation {
   static Future<void> shareCurrentLocation({String? shareMessage}) async {
     bool serviceEnabled;
@@ -10,17 +8,17 @@ class ShareMyLocation {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       await Geolocator.openLocationSettings();
-      CustomToast.error("Location services are disabled.");
+      return Future.error("Location services are disabled.");
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        CustomToast.error("Location permission denied.");
+        return Future.error("Location permission denied.");
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      CustomToast.error("Location permission permanently denied.");
+      return Future.error("Location permission permanently denied.");
     }
     Position position = await Geolocator.getCurrentPosition(
       locationSettings: LocationSettings(
